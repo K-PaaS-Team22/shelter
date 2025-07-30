@@ -1,21 +1,25 @@
 server:
   port: 8090
+
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/shelter
+    url: jdbc:mysql://mysql-service:3306/shelter
     username: root
-    password: dud990531@
+    password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+
   application:
     name: shelter
+
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka-service:9092
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
