@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+!build/libs/*.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Kubernetes
+k8s/
+
+# Jenkins
+Jenkinsfile
+
+# Documentation
+README.md
+*.md
+
+# Test files
+src/test/ 
