@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shelter-deployment
+  labels:
+    app: shelter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: shelter
+  template:
+    metadata:
+      labels:
+        app: shelter
+    spec:
+      containers:
+        - name: shelter-container
+          image: nexus.mycompany.com/shelter:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shelter-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: shelter
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

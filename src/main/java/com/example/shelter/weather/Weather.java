@@ -2,6 +2,8 @@ package com.example.shelter.weather;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Entity
 @Table(name = "weather", indexes = {
@@ -17,8 +19,14 @@ public class Weather {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String locationName;
+
+    private Integer nx;
+    private Integer ny;
     private String baseDate;
+    private String baseTime;
     private String fcstTime;
 
     private String tmp;   // 강수형태
@@ -31,4 +39,5 @@ public class Weather {
     private String pop;   // 풍속
     private String wav;   // 풍속
     private String pcp;   // 풍속
+
 }

@@ -4,16 +4,13 @@ import com.example.shelter.shelter.SummerShelterMapper;
 import com.example.shelter.shelter.WinterShelterMapper;
 import com.example.shelter.shelter.dto.SummerShelterDto;
 import com.example.shelter.shelter.dto.WinterShelterDto;
-import com.example.shelter.shelter.entity.SummerShelter;
-import com.example.shelter.shelter.entity.WinterShelter;
 import com.example.shelter.shelter.repository.SummerShelterRepository;
 import com.example.shelter.shelter.repository.WinterShelterRepository;
 import com.example.shelter.weather.Weather;
-import com.example.shelter.weather.WeatherDto;
+import com.example.shelter.weather.dto.WeatherDto;
 import com.example.shelter.weather.WeatherMapper;
 import com.example.shelter.weather.repository.WeatherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -56,7 +53,20 @@ public class KafkaConsumerService {
         ObjectMapper objectMapper = new ObjectMapper();
         List<WeatherDto> dtoList = data.stream()
                 .map(map -> objectMapper.convertValue(map, WeatherDto.class))
-                .collect(Collectors.toList());
-        if (!data.isEmpty()) weatherRepo.saveAll(weatherMapper.toEntityList(dtoList));
+                .toList();
+        if (!data.isEmpty()) {
+            for (WeatherDto dto : dtoList) saveOrUpdateByLocationName(dto);
+        }
+    }
+    public void saveOrUpdateByLocationName(WeatherDto dto) {
+        Weather entity = weatherRepo.findByLocationName(dto.getLocationName())
+                .orElse(new Weather());
+
+        if (entity.getId() == null) {
+            entity.setLocationName(dto.getLocationName());
+        }
+
+        weatherMapper.updateEntityFromDto(dto,entity);
+        weatherRepo.save(entity);
     }
 }
